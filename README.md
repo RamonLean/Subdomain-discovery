@@ -1,6 +1,11 @@
-# Descoberta-de-subdominios
-Scanner para descobrir subdominios.
+# Subdomain-discovery
 
-Exemplo de uso:
-python3 Scanner_subdomain.py example.com.br -l subdomains.txt
+POC Scanner for subdomains discovery using a wordlist Scanner para descobrir subdominios.
 
+Usage exemple:
+
+python3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt 
+
+## Installing
+
+pip install -r requirements.txt
