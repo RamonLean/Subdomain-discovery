@@ -84,8 +84,6 @@ class subdomain_discovering:
             print("[+] Subdomain discoverd using HTTP only:", url_http)
             self.save_discoverd_to_file(url_http)
 
-            #########chamar função de escrever em arquivo########
-
     def save_discoverd_to_file(self,url, subs_discovered='subs_discovered.txt'):
         '''Responsible to save the discoveries to file'''
         
