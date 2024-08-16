@@ -1,6 +1,6 @@
 # Subdomain-discovery
 
-POC Scanner for subdomains discovery using a wordlist Scanner para descobrir subdominios.
+POC Scanner for subdomains discovery using a wordlist.
 
 __*Usage example:*__
 
