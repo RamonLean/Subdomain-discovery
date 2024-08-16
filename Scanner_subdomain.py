@@ -15,7 +15,7 @@ class subdomain_discovering:
 
         '''This section initialize arguments and variables the will be used in all code'''
         
-        print ("\n\nExemple of usage: \nScanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt \n\n")
+        print ("\n\nExample of usage: \npython3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt \n\n")
 
         
         parser = argparse.ArgumentParser()
