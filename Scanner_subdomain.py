@@ -1,36 +1,138 @@
 import requests
 import argparse
-print ("\n\nExemplo de uso:\nScanner_subdominio.py example.com -l lista_subdominios.txt\n\n")
+import threading
 
-parser = argparse.ArgumentParser()
-parser.add_argument("dominio", help="Digite o dominio com ""exemplo.com" "")
-parser.add_argument("-l", "--lista", help="Arquivo de texto com a lista a ser testada")
 
-args = parser.parse_args()
-dominio = args.dominio
-subs_testar= args.lista
-try:
-    arquivo = open(subs_testar)
-    conteudo = arquivo.read()
-    subdominos =conteudo.splitlines()
-except:
-    print("Arquivo não encontrado")
-    exit()
-descobertos_subs = []
-for subdominio in subdominos:
-    url = f"http://{subdominio}.{dominio}"
-    try:
-        requests.get(url,timeout=5)
-    except requests.ConnectionError:
-        #print(url, "Não existe")
-        pass
-    except requests.Timeout:
-        pass
-    else:
-        print("[+] Subdomíno descoberto:", url)
-        descobertos_subs.append(url)
 
-with open("subs_descobertos.txt", "w") as f:
-    for subdominio in descobertos_subs:
-        print(subdominio, file=f)
-print("Finalizado")
+print("#####This is a brute force subdomain discovery scanner, be careful and be resposible for yor actions.####")
+
+
+
+
+class subdomain_discovering:
+    
+    def __init__(self):
+
+        '''This section initialize arguments and variables the will be used in all code'''
+        
+        print ("\n\nExemple of usage: \nScanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt \n\n")
+
+        
+        parser = argparse.ArgumentParser()
+        parser.add_argument("DOMAIN", help="Enter the domain" "exemple.com" "")
+        parser.add_argument("-l", "--list", help="File text with the subdomian list")
+        parser.add_argument("--save",help="File to save the subdomians discovered")
+
+        args = parser.parse_args()
+        self.domain = args.DOMAIN
+        self.subs_test= args.list
+        self.save = args.save
+
+
+        
+
+    def open_the_file (self):
+        
+        '''Function to open the subdomain list and return the each line for the "processing" function'''
+        
+        try:
+            file_ = open(self.subs_test)
+            content = file_.read()
+            subdomains = content.splitlines()
+            
+        except:
+            print("\n\n\n\n\n\n-------------------------------Wordlist not found------------------------------------------------------\n\n\n\n")
+            exit()
+
+        #discoverd_subs = []
+        for subdomain in subdomains:
+            yield subdomain
+        
+        yield None
+         
+    def request_to_subdomains(self,subdomain):
+
+        ''' This section is responsible to make the requests to the subdomains, it tests HTTPS and HTTP, but sometimes the although the subdomain with HTTP(without TLS) is discovered, the subdomain can redirect all the traffic for HTTPS,i.e., just because a subdomain accepts a HTTP requests
+        it doesn't mean thyou will inteteract with the domain without TLS, but you can try.'''
+        
+        subdomain=subdomain
+        
+        url_httpS = f"https://{subdomain}.{self.domain}"
+        url_http = f"http://{subdomain}.{self.domain}"
+        
+        try:
+            requests.get(url_httpS,timeout=5)
+            
+            
+        except requests.ConnectionError:
+            pass
+        except requests.Timeout:
+            pass
+        else:
+            print("[+] Subdomain discoverd using HTTPS:", url_httpS)
+            self.save_discoverd_to_file(url_httpS)
+
+
+        try:
+            requests.get(url_http,timeout=5)
+        except requests.ConnectionError:
+            pass
+        except requests.Timeout:
+            pass
+
+        else:
+            print("[+] Subdomain discoverd using HTTP only:", url_http)
+            self.save_discoverd_to_file(url_http)
+
+            #########chamar função de escrever em arquivo########
+
+    def save_discoverd_to_file(self,url, subs_discovered='subs_discovered.txt'):
+        '''Responsible to save the discoveries to file'''
+        
+        if ((self.save)==''):
+            self.save='subs_discovered.txt'
+            
+            
+        
+        with open(self.save, "a") as f:
+            
+            print(str(url), file=f)
+            
+        print(".......................New sub domain written to the file.........................")
+
+
+    def processing(self,interator):
+        
+        ''' This function is passed as argument to threads and is responsible to callin "request_to_subdomains", which in turn is responsible to make the requests to the subdomains. '''
+        
+        while True:
+            try:
+                items0 = next(interator)
+                while items0 is not None:
+                    self.request_to_subdomains(items0)
+                    items0 = next(interator)
+                break
+            except ValueError as error:
+                    pass
+                
+    def threads_call(self,QTD_thread=10):
+
+        ''' Thread function, you can defined whatever you want but make sure o system has the necessary resources.'''
+        
+        threads_ = []
+        interator = self.open_the_file()
+        for ixt in range(QTD_thread):
+            x1 = threading.Thread(target=self.processing, args=(interator,))
+            threads_.append(x1)
+            x1.start()
+
+        for i in threads_:
+            i.join()
+
+
+
+            
+if __name__ == '__main__':
+    
+       calling = subdomain_discovering()
+       calling.threads_call()
