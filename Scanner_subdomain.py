@@ -2,12 +2,7 @@ import requests
 import argparse
 import threading
 
-
-
 print("#####This is a brute force subdomain discovery scanner, be careful and be resposible for yor actions.####")
-
-
-
 
 class subdomain_discovering:
     
@@ -17,7 +12,6 @@ class subdomain_discovering:
         
         print ("\n\nExample of usage: \npython3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt \n\n")
 
-        
         parser = argparse.ArgumentParser()
         parser.add_argument("DOMAIN", help="Enter the domain" "exemple.com" "")
         parser.add_argument("-l", "--list", help="File text with the subdomian list")
@@ -27,9 +21,6 @@ class subdomain_discovering:
         self.domain = args.DOMAIN
         self.subs_test= args.list
         self.save = args.save
-
-
-        
 
     def open_the_file (self):
         
@@ -62,8 +53,6 @@ class subdomain_discovering:
         
         try:
             requests.get(url_httpS,timeout=5)
-            
-            
         except requests.ConnectionError:
             pass
         except requests.Timeout:
@@ -71,7 +60,6 @@ class subdomain_discovering:
         else:
             print("[+] Subdomain discoverd using HTTPS:", url_httpS)
             self.save_discoverd_to_file(url_httpS)
-
 
         try:
             requests.get(url_http,timeout=5)
@@ -88,16 +76,11 @@ class subdomain_discovering:
         '''Responsible to save the discoveries to file'''
         
         if ((self.save)==''):
-            self.save='subs_discovered.txt'
-            
-            
+            self.save='subs_discovered.txt'            
         
         with open(self.save, "a") as f:
-            
             print(str(url), file=f)
-            
         print(".......................New sub domain written to the file.........................")
-
 
     def processing(self,interator):
         
@@ -126,9 +109,6 @@ class subdomain_discovering:
 
         for i in threads_:
             i.join()
-
-
-
             
 if __name__ == '__main__':
     
