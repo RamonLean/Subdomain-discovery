@@ -10,17 +10,19 @@ class subdomain_discovering:
 
         '''This section initialize arguments and variables the will be used in all code'''
         
-        print ("\n\nExample of usage: \npython3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt \n\n")
+        print ("\n\nExample of usage: \npython3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt --threads 10 \n\n")
 
         parser = argparse.ArgumentParser()
         parser.add_argument("DOMAIN", help="Enter the domain" "exemple.com" "")
         parser.add_argument("-l", "--list", help="File text with the subdomian list")
         parser.add_argument("--save",help="File to save the subdomians discovered")
-
+        parser.add_argument("--threads",help="Numer of threads used")
+   
         args = parser.parse_args()
         self.domain = args.DOMAIN
         self.subs_test= args.list
         self.save = args.save
+        self.number_threads = args.threads
 
     def open_the_file (self):
         
@@ -103,7 +105,11 @@ class subdomain_discovering:
     def threads_call(self,QTD_thread=10):
 
         ''' Thread function, you can define whatever you want but make sure o system has the necessary resources.'''
-        
+        if self.number_threads=='':
+            pass
+        else:
+            QTD_thread=int(self.number_threads)
+
         threads_ = []
         interator = self.open_the_file()
         for ixt in range(QTD_thread):
