@@ -24,7 +24,7 @@ class subdomain_discovering:
 
     def open_the_file (self):
         
-        '''Function to open the subdomain list and return the each line for the "processing" function'''
+        '''Function to open the list of subdomains and return each line to the "processing" function'''
         
         try:
             file_ = open(self.subs_test)
@@ -43,8 +43,12 @@ class subdomain_discovering:
          
     def request_to_subdomains(self,subdomain):
 
-        ''' This section is responsible to make the requests to the subdomains, it tests HTTPS and HTTP, but sometimes the although the subdomain with HTTP(without TLS) is discovered, the subdomain can redirect all the traffic for HTTPS,i.e., just because a subdomain accepts a HTTP requests
-        it doesn't mean thyou will inteteract with the domain without TLS, but you can try.'''
+        ''' This section is responsible to make the requests to the subdomains, 
+        testing HTTPS and HTTP, but sometimes even 
+        though the subdomain is discovered with HTTP (without TLS), all 
+        traffic can be redirected to HTTPS due to load balancer/server 
+        rule, i.e., just because a subdomain accepts an HTTP requests, it 
+        doesn't mean that you will interact with it without TLS, but you can try.'''
         
         subdomain=subdomain
         
@@ -58,7 +62,7 @@ class subdomain_discovering:
         except requests.Timeout:
             pass
         else:
-            print("[+] Subdomain discoverd using HTTPS:", url_httpS)
+            print("[+] Subdomain discovered using HTTPS:", url_httpS)
             self.save_discoverd_to_file(url_httpS)
 
         try:
@@ -69,7 +73,7 @@ class subdomain_discovering:
             pass
 
         else:
-            print("[+] Subdomain discoverd using HTTP only:", url_http)
+            print("[+] Subdomain discovered using HTTP only:", url_http)
             self.save_discoverd_to_file(url_http)
 
     def save_discoverd_to_file(self,url, subs_discovered='subs_discovered.txt'):
@@ -84,7 +88,7 @@ class subdomain_discovering:
 
     def processing(self,interator):
         
-        ''' This function is passed as argument to threads and is responsible to callin "request_to_subdomains", which in turn is responsible to make the requests to the subdomains. '''
+        ''' This function is passed as an argument to “threads_call” and is responsible for calling “request_to_subdomains”, which in turn makes the requests to the subdomains. '''
         
         while True:
             try:
@@ -98,7 +102,7 @@ class subdomain_discovering:
                 
     def threads_call(self,QTD_thread=10):
 
-        ''' Thread function, you can defined whatever you want but make sure o system has the necessary resources.'''
+        ''' Thread function, you can define whatever you want but make sure o system has the necessary resources.'''
         
         threads_ = []
         interator = self.open_the_file()
