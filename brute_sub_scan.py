@@ -10,7 +10,7 @@ class subdomain_discovering:
 
         '''This section initialize arguments and variables the will be used in all code'''
         
-        print ("\n\nExample of usage: \npython3 Scanner_subdomain.py MYDOMAIN.COM -l list_subdomains.txt --save MYDISCOVERIES.txt --threads 10 \n\n")
+        print ("\n\nExample of usage: \npython3 brute_sub_scan.py MYDOMAIN.COM -l subdomains-10000.txt --save MYDISCOVERIES.txt --threads 10 \n\n")
 
         parser = argparse.ArgumentParser()
         parser.add_argument("DOMAIN", help="Enter the domain" "exemple.com" "")

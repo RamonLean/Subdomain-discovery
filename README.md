@@ -4,8 +4,7 @@ POC Scanner for subdomains discovery using a wordlist.
 
 __*Usage example:*__
 
-**python3** *Scanner_subdomain.py* MYDOMAIN.COM -l *list_subdomains.txt* *--save* MYDISCOVERIES.txt 
-
+**python3** *brute_sub_scan.py* MYDOMAIN.COM -l *subdomains-10000.txt* *--save* MYDISCOVERIES.txt --threads 10
 ## Installing
 
 pip install -r requirements.txt
